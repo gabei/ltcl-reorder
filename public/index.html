@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Excel Reorder</title>
+
+  <script src="./scripts/script.js" defer></script>
 </head>
 <body>
 
   <main>
     <h1>Reorder</h1>
-    <form action="">
-      <label for="files">Choose file(s) to upload</label>
-      <input type="file" id="files" name="files" accept="csv" multiple required>
+    <form id="file-upload">
+      <label for="file-select">Choose file(s) to upload</label>
+      <input type="file" id="file-select" name="file-select" accept="csv" multiple required>
+      <button type="submit">Upload</button>
     </form>
 
     <div class="downloads">
