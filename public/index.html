@@ -11,9 +11,9 @@
 
   <main>
     <h1>Reorder</h1>
-    <form id="file-upload">
+    <form method="post" action="/reorder" id="file-upload" enctype="multipart/form-data">
       <label for="file-select">Choose file(s) to upload</label>
-      <input type="file" id="file-select" name="file-select" accept="csv" multiple required>
+      <input type="file" id="file-select" name="file-select" >
       <button type="submit">Upload</button>
     </form>
 

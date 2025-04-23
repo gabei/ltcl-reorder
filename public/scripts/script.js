@@ -3,33 +3,35 @@ const fileSelect = document.getElementById("file-select");
 
 
 
-fileUpload.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  let files = fileSelect.files;
+// fileUpload.addEventListener("submit", async (e) => {
+//   e.preventDefault();
+//   let files = fileSelect.files;
+
+//   console.log(files);
   
-  let data = await handleSubmit(files);
-  console.log(data);
-});
+//   let data = await handleSubmit(files);
+//   console.log(data);
+// });
 
 
 
-async function handleSubmit(fileData){
-  const options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "multipart/form-data"
-    },
-    body: fileData
-  }
+// async function handleSubmit(fileData){
+//   const options = {
+//     method: "POST",
+//     headers: {
+//       // "Content-Type": "multipart/form-data"
+//     },
+//     body: fileData
+//   }
 
-  try 
-  {
-    const response = await fetch("/reorder", options);
-    return response.json();
-  }
-  catch(error)
-  {
-    console.error(error);
-  }
+//   try 
+//   {
+//     const response = await fetch("/reorder", options);
+//     return response.json();
+//   }
+//   catch(error)
+//   {
+//     console.error(error);
+//   }
   
-}
+// }
