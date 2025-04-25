@@ -16,16 +16,27 @@ app.use(express.static('public'));
 // multer is used for file uploads and temp storage
 // whichever storage works for python to work on them temporarily
 const storage = multer.diskStorage({
-  destination: function(req, file cb) {
-    cb();
+  destination: function(req, file, cb) {
+    cb(null, './src/input');
   },
   filename: function(req, file, cb) {
-    const suffix = "input-" + Date.now() + "-" + Math.random() * 1E9;
+    const suffix = Date.now() + "-" + Math.random() * 1E9 + ".csv";
     cb(null, file.fieldname + "-" + suffix);
-  }
+  },
 })
 
-const upload = multer({ storage: storage});
+function fileFilterOptions(req, file, cb) {
+  if(file.mimetype ==="text/csv"){
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type'));
+  }
+}
+
+const upload = multer({ 
+  storage: storage,
+  fileFilter: fileFilterOptions,
+});
 
 
 app.get('/', async (req, res, next) => {
