@@ -3,15 +3,16 @@ const fileSelect = document.getElementById("file-select");
 
 
 
-// fileUpload.addEventListener("submit", async (e) => {
-//   e.preventDefault();
-//   let files = fileSelect.files;
+fileUpload.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  console.log("Uploading...");
+  // let files = fileSelect.files;
 
-//   console.log(files);
+  // console.log(files);
   
-//   let data = await handleSubmit(files);
-//   console.log(data);
-// });
+  // let data = await handleSubmit(files);
+  // console.log(data);
+});
 
 
 
