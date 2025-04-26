@@ -4,7 +4,7 @@ const fileSelect = document.getElementById("file-select");
 
 
 fileUpload.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  //e.preventDefault();
   console.log("Uploading...");
   // let files = fileSelect.files;
 
