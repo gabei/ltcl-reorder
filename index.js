@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import multer from 'multer';
+import {storage, fileFilterOptions} from './storage/storage.js';
 
 
 const port = 3000;
@@ -13,33 +14,10 @@ app.use(helmet());
 app.use(express.static('public'));
 
 
-// multer is used for file uploads and temp storage
-// whichever storage works for python to work on them temporarily
-// below is the default setup for diskStorage provided by 
-// multer documentation
-const storage = multer.diskStorage({
-  destination: 'src/input',
-  // filename: function (req, file, cb) {
-  //   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + ".csv";
-  //   cb(null, file.fieldname + '-' + uniqueSuffix)
-  // }
-})
-
-
-// function fileFilterOptions(req, file, cb) {
-//   if(file.mimetype ==="text/csv"){
-//     cb(null, true);
-//   } else {
-//     cb(new Error('Invalid file type'));
-//   }
-// }
-
-
 const upload = multer({ 
   storage: storage,
-  // fileFilter: fileFilterOptions,
+  //fileFilter: fileFilterOptions,
 });
-
 
 
 app.get('/', async (req, res, next) => {
@@ -47,7 +25,7 @@ app.get('/', async (req, res, next) => {
 });
 
 
-app.post('/reorder', upload.single('file-select'), async (req, res, next) => {
+app.post('/reorder', upload.array('file-select', 5), async (req, res, next) => {
   if(req.file){
     res.status(200).send({response: 'File received.'});
   }
