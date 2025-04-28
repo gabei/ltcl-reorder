@@ -32,7 +32,6 @@ app.post('/reorder', upload.array('file-select', 5), async (req, res, next) => {
   console.log("/reorder hit");
   console.log(req.file);
   console.log(req.body);
-  
 });
 
 
