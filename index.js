@@ -31,6 +31,8 @@ app.post('/reorder', upload.array('file-select', 5), async (req, res, next) => {
   if(req.files){
     res.status(200).send({response: 'File received.'});
     console.log(req.files);
+  } else {
+    next(err);
   }
 });
 

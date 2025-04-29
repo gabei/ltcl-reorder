@@ -15,9 +15,11 @@ const MOCK_FILES = {
   csv: new Blob([""], {type: "text/csv"})
 }
 
+
 const mockRequest = {
   body: { name: "John Smith",email: "john@example.com" }
 }
+
 
 const mockFilter = jest.fn(fileFilterOptions);
 const mockMulterCallback = jest.fn();
@@ -26,7 +28,6 @@ const fileDidNotPass = new Error('Invalid file type');
 
 
 describe("Multer's file filter", () => {
-
 
   // json file should fail
   test('should employ an error callback when json files are passed', () => {
