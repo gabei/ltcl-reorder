@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 
 
 function fileFilterOptions(req, file, cb) {
-  if(file.mimetype ==="text/csv"){
+  if(file.mimetype === "text/csv" || file.type === "text/csv"){
     cb(null, true);
   } else {
     cb(new Error('Invalid file type'));
