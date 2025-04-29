@@ -16,7 +16,7 @@ app.use(express.static('public'));
 
 const upload = multer({ 
   storage: storage,
-  //fileFilter: fileFilterOptions,
+  fileFilter: fileFilterOptions,
 });
 
 
