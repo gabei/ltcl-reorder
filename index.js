@@ -16,7 +16,7 @@ app.use(express.static('public'));
 
 const upload = multer({ 
   storage: storage,
-  //fileFilter: fileFilterOptions,
+  fileFilter: fileFilterOptions,
 });
 
 
@@ -29,6 +29,7 @@ app.post('/reorder', upload.array('file-select', 5), async (req, res, next) => {
   if(req.file){
     res.status(200).send({response: 'File received.'});
   }
+  
   console.log("/reorder hit");
   console.log(req.file);
   console.log(req.body);

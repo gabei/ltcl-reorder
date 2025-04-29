@@ -1,9 +1,13 @@
+/* Multer middleware is used for file uploads and storage in Express.
+   - Below is the default setup for diskStorage provided by Multer's documentation
+   - Files will be stored to the disk temporarily while a python script works on them
+   - Files should be removed afterward
+   - View the docs here: https://github.com/expressjs/multer
+*/
 
-// multer is used for file uploads and temp storage
-// whichever storage works for python to work on them temporarily
-// below is the default setup for diskStorage provided by 
-// multer documentation
+
 import multer from "multer";
+
 
 const storage = multer.diskStorage({
   destination: 'src/input',
@@ -21,5 +25,6 @@ function fileFilterOptions(req, file, cb) {
     cb(new Error('Invalid file type'));
   }
 }
+
 
 export { storage, fileFilterOptions };
