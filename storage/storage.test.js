@@ -2,7 +2,7 @@
 
 
 import jest from 'jest-mock';
-import { fileFilterOptions } from "./storage";
+import { fileFilterOptions, filterCallback } from "./storage";
 import { Blob } from 'buffer';
 
 
@@ -22,7 +22,7 @@ const mockRequest = {
 
 
 const mockFilter = jest.fn(fileFilterOptions);
-const mockMulterCallback = jest.fn();
+const mockCallback = jest.fn(filterCallback);
 const filePassed = [null, true];
 const fileDidNotPass = new Error('Invalid file type');
 
@@ -31,43 +31,43 @@ describe("Multer's file filter", () => {
 
   // json file should fail
   test('should employ an error callback when json files are passed', () => {
-    mockFilter(mockRequest, MOCK_FILES.json, mockMulterCallback);
-    expect(mockMulterCallback).toHaveBeenCalledWith(fileDidNotPass);
+    mockFilter(mockRequest, MOCK_FILES.json, mockCallback);
+    expect(mockCallback).toHaveBeenCalledWith(fileDidNotPass);
   });
 
 
   // jpg file should fail
   test('should employ an error callback when jpg files are passed', () => {
-    mockFilter(mockRequest, MOCK_FILES.jpg, mockMulterCallback);
-    expect(mockMulterCallback).toHaveBeenCalledWith(fileDidNotPass);
+    mockFilter(mockRequest, MOCK_FILES.jpg, mockCallback);
+    expect(mockCallback).toHaveBeenCalledWith(fileDidNotPass);
   });
 
 
   // gif file should fail
   test('should employ an error callback when gif files are passed', () => {
-    mockFilter(mockRequest, MOCK_FILES.gif, mockMulterCallback);
-    expect(mockMulterCallback).toHaveBeenCalledWith(fileDidNotPass);
+    mockFilter(mockRequest, MOCK_FILES.gif, mockCallback);
+    expect(mockCallback).toHaveBeenCalledWith(fileDidNotPass);
   });
 
 
   // pdf file should fail
   test('should employ an error callback when pdf files are passed', () => {
-    mockFilter(mockRequest, MOCK_FILES.pdf, mockMulterCallback);
-    expect(mockMulterCallback).toHaveBeenCalledWith(fileDidNotPass);
+    mockFilter(mockRequest, MOCK_FILES.pdf, mockCallback);
+    expect(mockCallback).toHaveBeenCalledWith(fileDidNotPass);
   });
 
 
   // php file should fail
   test('should employ an error callback when php files are passed', () => {
-    mockFilter(mockRequest, MOCK_FILES.php, mockMulterCallback);
-    expect(mockMulterCallback).toHaveBeenCalledWith(fileDidNotPass);
+    mockFilter(mockRequest, MOCK_FILES.php, mockCallback);
+    expect(mockCallback).toHaveBeenCalledWith(fileDidNotPass);
   });
 
 
   // csv file should pass
   test('should employ a truthy callback for CSV files', () => {
-    mockFilter(mockRequest, MOCK_FILES.csv, mockMulterCallback);
-    expect(mockMulterCallback).toHaveBeenCalledWith(...filePassed);
+    mockFilter(mockRequest, MOCK_FILES.csv, mockCallback);
+    expect(mockCallback).toHaveBeenCalledWith(...filePassed);
   });
 })
 
