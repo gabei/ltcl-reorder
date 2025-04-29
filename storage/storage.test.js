@@ -63,7 +63,7 @@ describe("Multer's file filter", () => {
   });
 
 
-  // csv file should passW
+  // csv file should pass
   test('should employ a truthy callback for CSV files', () => {
     mockFilter(mockRequest, MOCK_FILES.csv, mockMulterCallback);
     expect(mockMulterCallback).toHaveBeenCalledWith(...filePassed);

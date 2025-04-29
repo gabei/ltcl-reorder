@@ -1,0 +1,2 @@
+<h1>LTCL Reorder and Monorepo</h1>
+<p>This repo is intended to give staff access to various scripts and tools that I make over time. I wanted a place to continuously deploy them and act as a jumping off point. In reality, many of these tools could be done with shell scripts or maybe within the apps themselves. I consider this a learning / "passion" project.</p>
