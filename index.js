@@ -14,26 +14,32 @@ app.use(helmet());
 app.use(express.static('public'));
 
 
-const upload = multer({ 
-  storage: storage,
-  fileFilter: fileFilterOptions,
-});
-
-
 app.get('/', async (req, res, next) => {
   res.status(200).send('Welcome!');
 });
 
 
-app.post('/reorder', upload.array('file-select', 5), async (req, res, next) => {
-  console.log("/reorder hit");
+const upload = multer({ 
+  storage: storage,
+  fileFilter: fileFilterOptions,
+});
 
-  if(req.files){
-    res.status(200).send({response: 'File received.'});
-    console.log(req.files);
-  } else {
-    next(err);
-  }
+const uploadImageArray = upload.array('file-select', 5);
+
+
+app.post('/reorder', async (req, res, next) => {
+  console.log("Files uploaded:\n" + req.files);
+
+  uploadImageArray(req, res, (err)=> {
+
+    if(err){
+      res.status(415).send("Your files were rejected with the following error message:\n" + err.message);
+    } else {
+      res.status(200).send({
+        message: "Your files were uploaded successfully!"
+      })
+    }
+  })
 });
 
 

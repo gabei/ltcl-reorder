@@ -18,7 +18,6 @@ const storage = multer.diskStorage({
 })
 
 
-
 function fileFilterOptions(req, file, filterCallback) {
   if(file.mimetype === "text/csv" || file.type === "text/csv"){
     filterCallback(null, true);
@@ -28,13 +27,17 @@ function fileFilterOptions(req, file, filterCallback) {
 }
 
 
-// status code 415: unsuppported media type
+
 function filterCallback(err, fileDoesPass) {
+
+
   if(err) {
     // Handle error here and return to caller can send response status
-    console.log(err.message);
+    // - status code 415: unsuppported media type
+    throw new Error("Failed with " + err.message);
   }
 
+  
     // otherwise the file passes
     // return true to caller so file manipulation can begin from there
     return fileDoesPass
