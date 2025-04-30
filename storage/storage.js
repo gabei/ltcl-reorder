@@ -29,12 +29,10 @@ function fileFilterOptions(req, file, filterCallback) {
 
 
 function filterCallback(err, fileDoesPass) {
-
-
   if(err) {
     // Handle error here and return to caller can send response status
     // - status code 415: unsuppported media type
-    throw new Error("Failed with " + err.message);
+    throw err;
   }
 
   

@@ -29,41 +29,19 @@ const fileDidNotPass = new Error('Invalid file type');
 
 describe("Multer's file filter", () => {
 
-  // json file should fail
-  test('should throw an error callback when json files are passed', () => {
-    mockFilter(mockRequest, MOCK_FILES.json, mockCallback);
-    expect(mockCallback).toHaveBeenCalledWith(fileDidNotPass);
-  });
-
-
-  // jpg file should fail
-  test('should throw an error callback when jpg files are passed', () => {
-    mockFilter(mockRequest, MOCK_FILES.jpg, mockCallback);
-    expect(mockCallback).toHaveBeenCalledWith(fileDidNotPass);
-  });
-
-
-  // gif file should fail
-  test('should throw an error callback when gif files are passed', () => {
-    mockFilter(mockRequest, MOCK_FILES.gif, mockCallback);
-    expect(mockCallback).toHaveBeenCalledWith(fileDidNotPass);
-  });
-
-
-  // pdf file should fail
-  test('should throw an error callback when pdf files are passed', () => {
-    mockFilter(mockRequest, MOCK_FILES.pdf, mockCallback);
-    expect(mockCallback).toHaveBeenCalledWith(fileDidNotPass);
-  });
-
-
-  // php file should fail
-  test('should throw an error callback when php files are passed', () => {
-    const test = mockFilter(mockRequest, MOCK_FILES.php, mockCallback);
-    test();
-    expect(mockCallback).toHaveBeenCalledWith(fileDidNotPass)
-    expect(test()).toThrow();
-  });
+  test.each([
+    [MOCK_FILES.json], 
+    [MOCK_FILES.jpg], 
+    [MOCK_FILES.gif],
+    [MOCK_FILES.pdf],
+    [MOCK_FILES.php],
+  ])('should throw an error when %o file types are passed',
+    (file) => {
+      expect(()=> {
+        mockFilter(mockRequest, file, mockCallback);
+      }).toThrow(fileDidNotPass);
+    },
+  );
 
 
   // csv file should pass
@@ -71,5 +49,5 @@ describe("Multer's file filter", () => {
     mockFilter(mockRequest, MOCK_FILES.csv, mockCallback);
     expect(mockCallback).toHaveBeenCalledWith(...filePassed);
   });
-})
+});
 
