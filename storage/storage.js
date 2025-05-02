@@ -7,10 +7,15 @@
 
 
 import multer from "multer";
+import path from "path";
+
+
+const __dirname = import.meta.dirname;
+const inputStorageDirectory = path.join(__dirname, '../apps/input');
 
 
 const storage = multer.diskStorage({
-  destination: 'src/input',
+  destination: inputStorageDirectory,
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + ".csv";
     cb(null, file.fieldname + '-' + uniqueSuffix)
