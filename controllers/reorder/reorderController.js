@@ -1,5 +1,6 @@
 import multer from 'multer';
 import {storage, fileFilterOptions} from '../../storage/storage.js';
+import initializeReorderScript from '../../apps/processes.js';
 
 
 const upload = multer({ 
@@ -11,18 +12,34 @@ const upload = multer({
 const uploadImageArray = upload.array('file-select', 5);
 
 
-export default async function handleReorder(req, res, next){
-  console.log("Files uploaded:\n" + req.files);
+async function handleReorder(req, res, next){
+  console.log("files uploaded!");
+
+  let errors = [];
+  let filesLength = 0;
 
   uploadImageArray(req, res, (err)=> {
-    if(err){
-      res.status(415).send("Your files were rejected with the following error message:\n" + err.message);
-    } else {
-      // act on the csv files
-      res.status(200).send({
-        message: "Your files were uploaded successfully!"
-      })
-    }
+    filesLength = req.files.length;
+    if(err){ errors.push(err) } 
+  })
+
+  await initializeReorderScript(filesLength).catch((err) => {
+    errors.push(err);
+  });
+
+  if(errors.length > 0){
+    let errorMessages = "There were errors while running the reorder script: " + errors.join(",\n");
+    
+    console.log(errorMessages);
+    return res.status(400).send({
+      message: errorMessages
+    }); 
+  }
+
+  res.status(200).send({
+    message: "Your files were uploaded successfully!"
   })
 }
+
+export default handleReorder
   
