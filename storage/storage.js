@@ -11,7 +11,7 @@ import path from "path";
 
 
 const __dirname = import.meta.dirname;
-const inputStorageDirectory = path.join(__dirname, '../apps/input');
+const inputStorageDirectory = path.join(__dirname, '../apps/reorder-app/input');
 
 
 const storage = multer.diskStorage({
