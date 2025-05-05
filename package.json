@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "sass": "sass public/styles/index.scss public/styles/style.css"
+    "sass": "sass public/styles/index.scss public/styles/style.css",
+    "bulma": "sass --load-path=node_modules public/styles/index.scss public/styles/style.css"
   },
   "author": "Gabe Garcia",
   "license": "ISC",
