@@ -1,4 +1,3 @@
-import { spawn } from "child_process";
 import { exec } from "child_process";
 import path from "path";
 import fs from "fs";
@@ -19,6 +18,7 @@ const spawnOptions = {
 
 export default async function initializeReorderScript(numberOfFiles){
   const spawnReorder = exec(scriptCommand, spawnOptions);
+  let processCompletedSuccessfully = false;
 
   spawnReorder.on("spawn", () => {
     console.log("Reorder script started.");
@@ -28,30 +28,36 @@ export default async function initializeReorderScript(numberOfFiles){
     return(new Error("There was an error while running the reorder script: " + err.message));
   })
 
-  spawnReorder.stdout.on("data", (data) => {
-    console.log("Reorder script complete. Data saved to output directory.");
-  })
-
   spawnReorder.on("close", (code) => {
-    console.log("Process closed with code " + code);
-  })
+    console.log("Reorder script process closed with code " + code);
 
-  let filesWereSuccessfullyConverted = await checkIfFilesWereConvertedSuccessfully(numberOfFiles);
-  return filesWereSuccessfullyConverted;
+    checkIfFilesWereConvertedSuccessfully(numberOfFiles).then((result) => {
+      if(result === true) { 
+        processCompletedSuccessfully = true; 
+      } else {
+        console.log("There was an error while confirming file output: " + result);
+        console.log(result)
+        return(new Error("There was an error while confirming file output."));
+      }
+    })
+  });
+
+  return processCompletedSuccessfully;
 }
 
-
 async function checkIfFilesWereConvertedSuccessfully(expectedNumberOfFiles){
+  const pathToOutputDir = path.join(__dirname, './reorder-app/output/');
   const fileError = new Error("There was an error while reading the output directory.");
 
   if( expectedNumberOfFiles === undefined || 
       expectedNumberOfFiles === null ||
       expectedNumberOfFiles === 0) {
+        console.log("expectedNumberOfFiles is not valid.");
         return fileError
-  }
+  } 
 
-  const pathToOutputDir = "./reorder-app/output/";
   const actualNumberOfFiles = fs.readdir(pathToOutputDir, (err, files) => {
+    console.log("Checking if files were converted successfully...");
     if(err) { return fileError }
     return files.length 
   })

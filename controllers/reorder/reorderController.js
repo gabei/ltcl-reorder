@@ -15,17 +15,21 @@ const uploadImageArray = upload.array('file-select', 5);
 async function handleReorder(req, res, next){
   console.log("files uploaded!");
 
+
   let errors = [];
   let filesLength = 0;
+
 
   uploadImageArray(req, res, (err)=> {
     filesLength = req.files.length;
     if(err){ errors.push(err) } 
   })
 
+
   await initializeReorderScript(filesLength).catch((err) => {
     errors.push(err);
   });
+
 
   if(errors.length > 0){
     let errorMessages = "There were errors while running the reorder script: " + errors.join(",\n");
@@ -34,11 +38,14 @@ async function handleReorder(req, res, next){
     return res.status(400).send({
       message: errorMessages
     }); 
+  } else {
+    console.log("Reorder script ran successfully.");
+    return res.status(200).send({
+      message: "Your files were uploaded successfully.",
+    });
   }
 
-  res.status(200).send({
-    message: "Your files were uploaded successfully!"
-  })
+  
 }
 
 export default handleReorder
