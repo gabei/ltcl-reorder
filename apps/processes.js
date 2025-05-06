@@ -16,7 +16,7 @@ const spawnOptions = {
 }
 
 
-export default async function initializeReorderScript(numberOfFiles){
+export default async function initializeReorderScript(){
   const spawnReorder = exec(scriptCommand, spawnOptions);
   let processCompletedSuccessfully = false;
 
@@ -31,8 +31,9 @@ export default async function initializeReorderScript(numberOfFiles){
   spawnReorder.on("close", (code) => {
     console.log("Reorder script process closed with code " + code);
 
-    checkIfFilesWereConvertedSuccessfully(numberOfFiles).then((result) => {
+    checkIfFilesWereConvertedSuccessfully().then((result) => {
       if(result === true) { 
+        console.log("Files were converted successfully.");
         processCompletedSuccessfully = true; 
       } else {
         return(new Error("There was an error while confirming file output: " + result));
@@ -43,23 +44,43 @@ export default async function initializeReorderScript(numberOfFiles){
   return processCompletedSuccessfully;
 }
 
-async function checkIfFilesWereConvertedSuccessfully(expectedNumberOfFiles){
-  const pathToOutputDir = path.join(__dirname, './reorder-app/output/');
+async function checkIfFilesWereConvertedSuccessfully(retries=1){
+  const pathToInputDir = path.join(__dirname, './reorder-app/input');
+  const pathToOutputDir = path.join(__dirname, './reorder-app/output');
 
-  if( expectedNumberOfFiles === undefined || 
-      expectedNumberOfFiles === null ||
-      expectedNumberOfFiles === 0) {
-        console.log("Expected Number Of Files is not valid.");
-        return new Error("Expected Number Of Files is not valid.");
-  } 
+  const numberOfInputFiles = await readNumberOfFilesFromDir(pathToInputDir);
+  const numberOfOutputFiles = await readNumberOfFilesFromDir(pathToOutputDir);
 
-  const actualNumberOfFiles = fs.readdir(pathToOutputDir, (err, files) => {
-    console.log("Checking if files were converted successfully...");
-    if(err) { 
-      return new Error("There was an error while checking the output directoy: " + err.message); 
-    }
-    return files.length 
-  })
+  
+  // if( expectedNumberOfFiles === undefined || 
+  //     expectedNumberOfFiles === null ||
+  //     expectedNumberOfFiles === 0) {
 
-  return actualNumberOfFiles === expectedNumberOfFiles;
+  //       if(retries <= 3) {
+  //         console.log("Retrying to check if files were converted successfully: " + retries + "...");
+
+  //         setTimeout(() => {
+  //           return checkIfFilesWereConvertedSuccessfully(expectedNumberOfFiles, retries + 1);
+  //         }, 1000 * retries);
+
+  //       }
+
+  //       return new Error("Expected Number Of Files is not valid.");
+  // } 
+
+  return numberOfInputFiles === numberOfOutputFiles;
+}
+
+
+async function readNumberOfFilesFromDir(directoryPath) {
+  return new Promise((resolve, reject) => {
+    const pathToInputDir = path.join(__dirname, directoryPath);
+    fs.readdir(pathToInputDir, (err, files) => {
+      if(err) { 
+        reject(new Error("There was an error while checking the input directoy: " + err.message)); 
+      }
+      resolve(files.length);
+    });
+  });
+
 }
