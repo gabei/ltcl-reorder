@@ -5,7 +5,7 @@ import fs from "fs";
 
 
 const __dirname = import.meta.dirname;
-const pathToScript = path.join(__dirname, './reorder-app/reorder.py');
+const pathToScript = path.join(__dirname, './reorder-app');
 console.log("Path to reorder script: " + pathToScript);
 
 
@@ -18,7 +18,7 @@ const spawnOptions = {
 
 
 export default async function initializeReorderScript(numberOfFiles){
-  const spawnReorder = exec("python", spawnOptions);
+  const spawnReorder = exec("python reorder.py", spawnOptions);
 
   spawnReorder.on("spawn", () => {
     console.log("Reorder script started.");
