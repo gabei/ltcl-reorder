@@ -5,12 +5,12 @@ import fs from "fs";
 
 
 const __dirname = import.meta.dirname;
-const pathToScript = path.join(__dirname, './reorder-app');
-console.log("Path to reorder script: " + pathToScript);
+const scriptDirectory = path.join(__dirname, './reorder-app');
+const scriptCommand = "python reorder.py";
 
 
 const spawnOptions = {
-  cwd: pathToScript,
+  cwd: scriptDirectory,
   timeout: 5000,
   windowsHide: true,
 
@@ -18,7 +18,7 @@ const spawnOptions = {
 
 
 export default async function initializeReorderScript(numberOfFiles){
-  const spawnReorder = exec("python reorder.py", spawnOptions);
+  const spawnReorder = exec(scriptCommand, spawnOptions);
 
   spawnReorder.on("spawn", () => {
     console.log("Reorder script started.");
