@@ -35,9 +35,7 @@ export default async function initializeReorderScript(numberOfFiles){
       if(result === true) { 
         processCompletedSuccessfully = true; 
       } else {
-        console.log("There was an error while confirming file output: " + result);
-        console.log(result)
-        return(new Error("There was an error while confirming file output."));
+        return(new Error("There was an error while confirming file output: " + result));
       }
     })
   });
@@ -47,18 +45,19 @@ export default async function initializeReorderScript(numberOfFiles){
 
 async function checkIfFilesWereConvertedSuccessfully(expectedNumberOfFiles){
   const pathToOutputDir = path.join(__dirname, './reorder-app/output/');
-  const fileError = new Error("There was an error while reading the output directory.");
 
   if( expectedNumberOfFiles === undefined || 
       expectedNumberOfFiles === null ||
       expectedNumberOfFiles === 0) {
         console.log("Expected Number Of Files is not valid.");
-        return fileError
+        return new Error("Expected Number Of Files is not valid.");
   } 
 
   const actualNumberOfFiles = fs.readdir(pathToOutputDir, (err, files) => {
     console.log("Checking if files were converted successfully...");
-    if(err) { return fileError }
+    if(err) { 
+      return new Error("There was an error while checking the output directoy: " + err.message); 
+    }
     return files.length 
   })
 
