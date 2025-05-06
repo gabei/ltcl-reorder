@@ -52,7 +52,7 @@ async function checkIfFilesWereConvertedSuccessfully(expectedNumberOfFiles){
   if( expectedNumberOfFiles === undefined || 
       expectedNumberOfFiles === null ||
       expectedNumberOfFiles === 0) {
-        console.log("expectedNumberOfFiles is not valid.");
+        console.log("Expected Number Of Files is not valid.");
         return fileError
   } 
 
