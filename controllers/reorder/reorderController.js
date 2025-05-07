@@ -1,5 +1,5 @@
 import multer from 'multer';
-import {storage, fileFilterOptions, deleteFile} from '../../storage/storage.js';
+import {storage, fileFilterOptions, cleanupFiles} from '../../storage/storage.js';
 import initializeReorderScript from '../../apps/processes.js';
 
 
@@ -45,7 +45,7 @@ async function handleReorder(request, response, next){
         });
       } else {
         try {
-          deleteFile(downloadPath);
+          cleanupFiles(downloadPath);
         } catch(err) {
           console.trace(err);
         }

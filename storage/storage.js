@@ -13,6 +13,7 @@ import fs from "fs"
 
 const __dirname = import.meta.dirname;
 const inputStorageDirectory = path.join(__dirname, '../apps/reorder-app/input');
+const outputStorageDirectory = path.join(__dirname, '../apps/reorder-app/output');
 
 
 const storage = multer.diskStorage({
@@ -52,22 +53,39 @@ function filterCallback(err, fileDoesPass) {
 
 
 
-async function deleteFile(filePath) {
+async function cleanupFiles() {
+  let errors =[];
+
   try {
-    fs.unlink(filePath, (err) => {  
-      if (err) {
-        console.error("Error deleting the file:", err);
-      } else {
-        console.log("File deleted successfully:", filePath);
-        return true;
-      }
-    })
-    
-  } catch(err) {
-    console.error("Error deleting the file:", err);
-    return new Error("Error deleting the file at" + filePath + ". :", err);
+    await deleteAllDirFiles(inputStorageDirectory);
+    await deleteAllDirFiles(outputStorageDirectory);
+  } catch (err) {
+    errors.push(err);
   }
+
+  if(errors.length > 0) return errors;
+  return true;
+}
+
+async function deleteAllDirFiles(storageDirectory) {
+  fs.readdir(storageDirectory, (err, files) => {
+    if (err) {
+      console.error("Error reading directory:", err);
+      return new Error("Error reading directory at " + storageDirectory + ":", err);
+    }
+    files.forEach(file => {
+      const filePath = path.join(storageDirectory, file);
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error("Error deleting file at "+ filePath + ":", err);
+        } else {
+          console.log("File deleted successfully:", filePath);
+          return true;
+        }
+      });
+    });
+  });
 }
 
 
-export { storage, fileFilterOptions, filterCallback, deleteFile };
+export { storage, fileFilterOptions, filterCallback, cleanupFiles };
