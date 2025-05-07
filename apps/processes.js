@@ -18,7 +18,6 @@ const spawnOptions = {
 
 export default async function initializeReorderScript(){
   const spawnReorder = exec(scriptCommand, spawnOptions);
-  let processCompletedSuccessfully = false;
 
   spawnReorder.on("spawn", () => {
     console.log("Reorder script started.");
@@ -28,56 +27,41 @@ export default async function initializeReorderScript(){
     return(new Error("There was an error while running the reorder script: " + err.message));
   })
 
-  spawnReorder.on("close", (code) => {
-    console.log("Reorder script process closed with code " + code);
-
-    checkIfFilesWereConvertedSuccessfully().then((result) => {
-      if(result === true) { 
-        console.log("Files were converted successfully.");
-        processCompletedSuccessfully = true; 
-      } else {
-        return(new Error("There was an error while confirming file output: " + result));
-      }
-    })
-  });
-
-  return processCompletedSuccessfully;
-}
-
-async function checkIfFilesWereConvertedSuccessfully(retries=1){
-  const pathToInputDir = path.join(__dirname, './reorder-app/input');
-  const pathToOutputDir = path.join(__dirname, './reorder-app/output');
-
-  const numberOfInputFiles = await readNumberOfFilesFromDir(pathToInputDir);
-  const numberOfOutputFiles = await readNumberOfFilesFromDir(pathToOutputDir);
+  return await new Promise((resolve, reject) => {  
+    spawnReorder.on("close", resolve(true));
+  }); 
+};
 
   
-  // if( expectedNumberOfFiles === undefined || 
-  //     expectedNumberOfFiles === null ||
-  //     expectedNumberOfFiles === 0) {
 
-  //       if(retries <= 3) {
-  //         console.log("Retrying to check if files were converted successfully: " + retries + "...");
+async function checkIfFilesWereConvertedSuccessfully(retries=1){
+  let pathToInputDir = path.join(__dirname, './reorder-app/input');
+  let pathToOutputDir = path.join(__dirname, './reorder-app/output');
 
-  //         setTimeout(() => {
-  //           return checkIfFilesWereConvertedSuccessfully(expectedNumberOfFiles, retries + 1);
-  //         }, 1000 * retries);
+  let numberOfInputFiles = await readNumberOfFilesFromDir(pathToInputDir);
+  let numberOfOutputFiles = await readNumberOfFilesFromDir(pathToOutputDir);
 
-  //       }
 
-  //       return new Error("Expected Number Of Files is not valid.");
-  // } 
-
-  return numberOfInputFiles === numberOfOutputFiles;
+  if(!numberOfInputFiles || !numberOfOutputFiles) {
+    console.log("There are no files in the input or output directory. Trying again: " + retries + " of 3");
+    if(retries < 3){
+      setTimeout(checkIfFilesWereConvertedSuccessfully, 1000 * retries, retries+1);
+    }
+  } else {
+    return numberOfInputFiles === numberOfOutputFiles;
+  }
 }
 
 
 async function readNumberOfFilesFromDir(directoryPath) {
+  if(!fs.existsSync(directoryPath)) {
+    return new Error("The directory does not exist: " + directoryPath);
+  }
+
   return new Promise((resolve, reject) => {
-    const pathToInputDir = path.join(__dirname, directoryPath);
-    fs.readdir(pathToInputDir, (err, files) => {
+    fs.readdir(directoryPath, (err, files) => {
       if(err) { 
-        reject(new Error("There was an error while checking the input directoy: " + err.message)); 
+        reject(new Error("There was an error while checking the input directory: " + err.message)); 
       }
       resolve(files.length);
     });
