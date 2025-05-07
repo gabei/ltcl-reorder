@@ -1,5 +1,5 @@
 import multer from 'multer';
-import {storage, fileFilterOptions} from '../../storage/storage.js';
+import {storage, fileFilterOptions, deleteFile} from '../../storage/storage.js';
 import initializeReorderScript from '../../apps/processes.js';
 
 
@@ -13,8 +13,6 @@ const uploadImageArray = upload.array('file-select', 5);
 
 
 async function handleReorder(request, response, next){
-  console.log("files uploaded!");
-
   let errors = [];
 
   uploadImageArray(request, response, (err)=> {
@@ -29,7 +27,6 @@ async function handleReorder(request, response, next){
 
   if(errors.length > 0){
     let errorMessages = "There were errors while running the reorder script: " + errors.join(",\n");
-
     errors.forEach((error) => {
       console.trace(error)
     });
@@ -39,9 +36,7 @@ async function handleReorder(request, response, next){
     }); 
   } else {
 
-    console.log("Reorder script ran successfully.");
     const downloadPath = 'apps/reorder-app/output/output-1.csv';
-
     response.status(200).download(downloadPath, (err) => {
       if (err) {
         console.error("Error downloading the file:", err);

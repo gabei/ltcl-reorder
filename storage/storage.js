@@ -8,6 +8,7 @@
 
 import multer from "multer";
 import path from "path";
+import fs from "fs"
 
 
 const __dirname = import.meta.dirname;
@@ -47,4 +48,23 @@ function filterCallback(err, fileDoesPass) {
 }
 
 
-export { storage, fileFilterOptions, filterCallback };
+
+async function deleteFile(filePath) {
+  try {
+    fs.unlink(filePath, (err) => {  
+      if (err) {
+        console.error("Error deleting the file:", err);
+      } else {
+        console.log("File deleted successfully:", filePath);
+        return true;
+      }
+    })
+    
+  } catch(err) {
+    console.error("Error deleting the file:", err);
+    return new Error("Error deleting the file at" + filePath + ". :", err);
+  }
+}
+
+
+export { storage, fileFilterOptions, filterCallback, deleteFile };
