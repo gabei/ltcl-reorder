@@ -25,7 +25,6 @@ async function handleReorder(request, response, next){
   if(result instanceof Error) {
     errors.push(result.message);
   }
-  console.log("Reorder script result: " + result);
   
 
   if(errors.length > 0){
@@ -39,10 +38,18 @@ async function handleReorder(request, response, next){
       message: errorMessages
     }); 
   } else {
+
     console.log("Reorder script ran successfully.");
-    return response.status(200).send({
-      message: "Your files were uploaded successfully.",
-    });
+    const downloadPath = 'apps/reorder-app/output/output-1.csv';
+
+    response.status(200).download(downloadPath, (err) => {
+      if (err) {
+        console.error("Error downloading the file:", err);
+        return response.status(500).send({
+          message: "There was an error while downloading the file.",
+        });
+      }
+    })
   }
 }
 
