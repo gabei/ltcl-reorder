@@ -30,9 +30,9 @@ export default async function initializeReorderScript(){
   spawnReorder.on("close", (code) => {
     console.log("Reorder script finished with code: " + code);
 
-    return new Promise((resolve, reject) => {
-      checkIfFilesWereConvertedSuccessfully().then((result) => {  
-        // result is currently returning undefined
+    return checkIfFilesWereConvertedSuccessfully().then((result) => { 
+      return new Promise((resolve, reject) => {
+        console.log("File check result: " + result);
         if(result) {
           resolve(result);
         } else {
