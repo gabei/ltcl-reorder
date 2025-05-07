@@ -17,32 +17,35 @@ const spawnOptions = {
 
 
 export default async function initializeReorderScript(){
-  const spawnReorder = exec(scriptCommand, spawnOptions);
+  return new Promise((resolve, reject) => {
+    const spawnReorder = exec(scriptCommand, spawnOptions);
 
-  spawnReorder.on("spawn", () => {
-    console.log("Reorder script started.");
-  });
+    spawnReorder.on("spawn", () => {
+      console.log("Reorder script started.");
+    });
 
-  spawnReorder.on("error", (err) => {
-    return(new Error("There was an error while running the reorder script: " + err.message));
-  })
+    spawnReorder.on("error", (err) => {
+      reject(new Error("There was an error while running the reorder script: " + err.message));
+    });
 
-  spawnReorder.on("close", (code) => {
-    console.log("Reorder script finished with code: " + code);
+    spawnReorder.on("close", async (code) => {
+      console.log("Reorder script finished with code: " + code);
 
-    return checkIfFilesWereConvertedSuccessfully().then((result) => { 
-      return new Promise((resolve, reject) => {
+      try {
+        const result = await checkIfFilesWereConvertedSuccessfully();
         console.log("File check result: " + result);
-        if(result) {
+
+        if (result) {
           resolve(result);
         } else {
-          reject(new Error("There was an error while returning a promise from the reorder script."));
+          reject(new Error("There was an error while checking the files after the reorder script."));
         }
-      })
-    })
+      } catch (err) {
+        reject(err);
+      }
+    });
   });
-};
-
+}
   
 
 async function checkIfFilesWereConvertedSuccessfully(retries=1){

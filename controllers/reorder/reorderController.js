@@ -21,9 +21,12 @@ async function handleReorder(request, response, next){
     if(err){ errors.push(err) } 
   })
 
-  let results = await initializeReorderScript();
-  if(results) console.log(results);
-  if(results instanceof Error) errors.push(results.message);
+  let result = await initializeReorderScript();
+  if(result instanceof Error) {
+    errors.push(result.message);
+  }
+  console.log("Reorder script result: " + result);
+  
 
   if(errors.length > 0){
     let errorMessages = "There were errors while running the reorder script: " + errors.join(",\n");
