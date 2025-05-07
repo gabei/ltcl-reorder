@@ -28,7 +28,7 @@ function fileFilterOptions(req, file, filterCallback) {
   if(file.mimetype === "text/csv" || file.type === "text/csv"){
     filterCallback(null, true);
   } else {
-    filterCallback(new Error('Invalid file type'));
+    filterCallback(new Error('Invalid file type:' + file.type + ' - ' + file.mimetype));
   }
 }
 
