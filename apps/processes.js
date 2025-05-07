@@ -27,9 +27,20 @@ export default async function initializeReorderScript(){
     return(new Error("There was an error while running the reorder script: " + err.message));
   })
 
-  return await new Promise((resolve, reject) => {  
-    spawnReorder.on("close", resolve(true));
-  }); 
+  spawnReorder.on("close", (code) => {
+    console.log("Reorder script finished with code: " + code);
+
+    return new Promise((resolve, reject) => {
+      checkIfFilesWereConvertedSuccessfully().then((result) => {  
+        // result is currently returning undefined
+        if(result) {
+          resolve(result);
+        } else {
+          reject(new Error("There was an error while returning a promise from the reorder script."));
+        }
+      })
+    })
+  });
 };
 
   
@@ -41,15 +52,17 @@ async function checkIfFilesWereConvertedSuccessfully(retries=1){
   let numberOfInputFiles = await readNumberOfFilesFromDir(pathToInputDir);
   let numberOfOutputFiles = await readNumberOfFilesFromDir(pathToOutputDir);
 
+  // if(!numberOfInputFiles || !numberOfOutputFiles) {
+  //   console.log("There are no files in the input or output directory. Trying again: " + retries + " of 3");
+  //   if(retries < 3){
+  //     setTimeout(checkIfFilesWereConvertedSuccessfully, 1000 * retries, retries+1);
+  //   }
+  // } else {
+  //   return numberOfInputFiles === numberOfOutputFiles;
+  // }
 
-  if(!numberOfInputFiles || !numberOfOutputFiles) {
-    console.log("There are no files in the input or output directory. Trying again: " + retries + " of 3");
-    if(retries < 3){
-      setTimeout(checkIfFilesWereConvertedSuccessfully, 1000 * retries, retries+1);
-    }
-  } else {
-    return numberOfInputFiles === numberOfOutputFiles;
-  }
+
+  return numberOfInputFiles === numberOfOutputFiles;
 }
 
 
@@ -61,7 +74,7 @@ async function readNumberOfFilesFromDir(directoryPath) {
   return new Promise((resolve, reject) => {
     fs.readdir(directoryPath, (err, files) => {
       if(err) { 
-        reject(new Error("There was an error while checking the input directory: " + err.message)); 
+        reject(new Error("There was an error while checking directory: " + directoryPath + "\n" + err.message)); 
       }
       resolve(files.length);
     });
