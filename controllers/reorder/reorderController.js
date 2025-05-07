@@ -43,8 +43,15 @@ async function handleReorder(request, response, next){
         return response.status(500).send({
           message: "There was an error while downloading the file.",
         });
+      } else {
+        try {
+          deleteFile(downloadPath);
+        } catch(err) {
+          console.trace(err);
+        }
       }
     })
+    
   }
 }
 
