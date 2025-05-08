@@ -1,14 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-
-
+import 'dotenv/config';
 import reorderRouter from './routes/reorder/reorderRouter.js';
 
-
-const port = 3000;
 const app = express();
-
+const PORT = process.env.LOCAL_PORT;
+const IP = process.env.LOCAL_PC_IP;
 
 app.use(cors());
 app.use(helmet());
@@ -21,10 +19,10 @@ app.get('/', async (req, res, next) => {
 });
 
 
-app.listen(port, (err)=> {
+app.listen(PORT, IP, (err)=> {
   if(err){
     console.log(err);
   }
-  console.log(`App listening on port ${port}`);
+  console.log(`App listening on port ${PORT} and IP ${IP}`);
 })
 
