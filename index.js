@@ -6,7 +6,6 @@ import reorderRouter from './routes/reorder/reorderRouter.js';
 
 const app = express();
 const PORT = process.env.LOCAL_PORT;
-const IP = process.env.LOCAL_PC_IP;
 
 app.use(cors());
 app.use(helmet());
@@ -19,10 +18,10 @@ app.get('/', async (req, res, next) => {
 });
 
 
-app.listen(PORT, IP, (err)=> {
+app.listen(PORT, (err)=> {
   if(err){
     console.log(err);
   }
-  console.log(`App listening on port ${PORT} and IP ${IP}`);
+  console.log(`App listening on port ${PORT}`);
 })
 
