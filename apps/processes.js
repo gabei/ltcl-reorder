@@ -31,8 +31,8 @@ export default async function initializeReorderScript(){
     });
 
     spawnReorder.on("close", async (code, signal) => {
-      if(code) console.log("Reorder script closed with code: " + code);
-      if(signal) console.log("Reorder script closed with signal: " + signal);
+      console.log("Reorder script closed with code: " + code);
+      console.log("Reorder script closed with signal: " + signal);
 
       try {
         const result = await checkIfFilesWereConvertedSuccessfully();
