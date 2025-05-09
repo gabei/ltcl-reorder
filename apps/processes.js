@@ -14,7 +14,7 @@ const spawnOptions = {
   cwd: scriptDirectory,
   timeout: 5000,
   windowsHide: true,
-
+  maxBuffer: 1024 * 1024 * 5, // 5 MB
 }
 
 
@@ -57,15 +57,19 @@ async function checkIfFilesWereConvertedSuccessfully(retries=1){
   let numberOfInputFiles = await readNumberOfFilesFromDir(pathToInputDir);
   let numberOfOutputFiles = await readNumberOfFilesFromDir(pathToOutputDir);
 
-  // if(!numberOfInputFiles || !numberOfOutputFiles) {
-  //   console.log("There are no files in the input or output directory. Trying again: " + retries + " of 3");
-  //   if(retries < 3){
-  //     setTimeout(checkIfFilesWereConvertedSuccessfully, 1000 * retries, retries+1);
-  //   }
-  // } else {
-  //   return numberOfInputFiles === numberOfOutputFiles;
-  // }
+  let retryRef;
 
+  if(!numberOfInputFiles || !numberOfOutputFiles) {
+    console.log("There are no files in the input or output directory. Trying again: " + retries + " of 3");
+    if(retries < 3){
+      retryRef = setTimeout(async () => {
+        await checkIfFilesWereConvertedSuccessfully(retries + 1);
+      }, 1000 * retries);
+    }
+  } else {
+      clearTimeout(retryRef);
+      return numberOfInputFiles === numberOfOutputFiles;
+  }
 
   return numberOfInputFiles === numberOfOutputFiles;
 }
