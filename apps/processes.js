@@ -30,8 +30,9 @@ export default async function initializeReorderScript(){
       reject(new Error("There was an error while running the reorder script: " + err.message));
     });
 
-    spawnReorder.on("close", async (code) => {
-      console.log("Reorder script finished with code: " + code);
+    spawnReorder.on("close", async (code, signal) => {
+      if(code) console.log("Reorder script closed with code: " + code);
+      if(signal) console.log("Reorder script closed with signal: " + signal);
 
       try {
         const result = await checkIfFilesWereConvertedSuccessfully();
