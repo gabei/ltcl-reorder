@@ -11,10 +11,21 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs"
 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const inputStorageDirectory = path.join(__dirname, '../apps/reorder-app/input');
 const outputStorageDirectory = path.join(__dirname, '../apps/reorder-app/output');
+initStorageDirectory(inputStorageDirectory);
+initStorageDirectory(outputStorageDirectory);
+
+
+async function initStorageDirectory(directory){
+  if(fs.existsSync(directory) === false) {
+    fs.mkdirSync(directory);
+    console.log("Input storage directory created at: " + directory);
+  }
+}
 
 
 const storage = multer.diskStorage({
