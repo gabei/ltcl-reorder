@@ -50,7 +50,7 @@ function filterCallback(err, fileDoesPass) {
   if(err) {
     // Handle error here and return to caller can send response status
     // - status code 415: unsuppported media type
-    throw err;
+    return err;
   }
     // otherwise the file passes
     // return true to caller so file manipulation can begin from there
