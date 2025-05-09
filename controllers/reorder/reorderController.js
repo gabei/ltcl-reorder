@@ -9,7 +9,7 @@ const upload = multer({
 });
 
 
-const uploadImageArray = upload.array('file-select', 5);
+const uploadImageArray = upload.array('file-input', 5);
 
 
 async function handleReorder(request, response, next){
