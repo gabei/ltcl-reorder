@@ -1,9 +1,10 @@
-const fileUpload = document.getElementById("file-upload");
-const fileSelect = document.getElementById("file-select");
+const fileUploadForm = document.querySelector("#file-upload-form");
+const fileSelect = document.querySelector("form input[type=file]");
+const fileName = document.querySelector("form .file-name");
 
 
 
-fileUpload.addEventListener("submit", async (e) => {
+fileUploadForm.addEventListener("submit", async (e) => {
   //e.preventDefault();
   console.log("Uploading...");
   // let files = fileSelect.files;
@@ -13,6 +14,14 @@ fileUpload.addEventListener("submit", async (e) => {
   // let data = await handleSubmit(files);
   // console.log(data);
 });
+
+
+fileSelect.addEventListener("change", (e) => {
+  if (fileSelect.files.length > 0) {
+    let name = fileSelect.files[0].name;
+    fileName.innerText = name;
+  }
+})
 
 
 
