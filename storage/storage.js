@@ -29,7 +29,6 @@ function fileFilterOptions(req, file, filterCallback) {
   if(file.mimetype === "text/csv" || file.mimetype === "application/vnd.ms-excel"
    
    ){
-    console.log("File type is valid:", file.mimetype, file.type);
     filterCallback(null, true);
   } else {
     filterCallback(new Error('Invalid file type:' + file.type + ' - ' + file.mimetype));
@@ -70,14 +69,14 @@ async function cleanupFiles() {
 async function deleteAllDirFiles(storageDirectory) {
   fs.readdir(storageDirectory, (err, files) => {
     if (err) {
-      console.error("Error reading directory:", err);
       return new Error("Error reading directory at " + storageDirectory + ":", err);
     }
+
     files.forEach(file => {
       const filePath = path.join(storageDirectory, file);
       fs.unlink(filePath, (err) => {
         if (err) {
-          console.error("Error deleting file at "+ filePath + ":", err);
+          return new Error("Error deleting file at "+ filePath + ":", err);
         } else {
           console.log("File deleted successfully:", filePath);
           return true;
