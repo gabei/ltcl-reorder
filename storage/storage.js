@@ -8,10 +8,11 @@
 
 import multer from "multer";
 import path from "path";
+import { fileURLToPath } from "url";
 import fs from "fs"
 
-
-const __dirname = import.meta.dirname;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const inputStorageDirectory = path.join(__dirname, '../apps/reorder-app/input');
 const outputStorageDirectory = path.join(__dirname, '../apps/reorder-app/output');
 
@@ -26,13 +27,12 @@ const storage = multer.diskStorage({
 
 
 function fileFilterOptions(req, file, filterCallback) {
-  if(file.mimetype === "text/csv" || file.mimetype === "application/vnd.ms-excel"
-   
-   ){
-    filterCallback(null, true);
-  } else {
-    filterCallback(new Error('Invalid file type:' + file.type + ' - ' + file.mimetype));
-  }
+  if(file.mimetype === "text/csv" || file.mimetype === "application/vnd.ms-excel" ||
+    file.type === "text/csv" || file.type === "application/vnd.ms-excel"){
+      filterCallback(null, true);
+    } else {
+      filterCallback(new Error('Invalid file type:' + file.type + ' - ' + file.mimetype));
+    }
 }
 
 

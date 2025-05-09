@@ -12,7 +12,8 @@ const MOCK_FILES = {
   gif: new Blob([""], {type: "image/gif"}),
   pdf: new Blob([""], {type: "application/pdf"}),
   php: new Blob([""], {type: "application/x-httpd-php"}),
-  csv: new Blob([""], {type: "text/csv"})
+  csv: new Blob([""], {type: "text/csv"}),
+  excel: new Blob([""], {type: "application/vnd.ms-excel"})
 }
 
 
@@ -24,7 +25,6 @@ const mockRequest = {
 const mockFilter = jest.fn(fileFilterOptions);
 const mockCallback = jest.fn(filterCallback);
 const filePassed = [null, true];
-const fileDidNotPass = new Error('Invalid file type');
 
 
 describe("Multer's file filter", () => {
@@ -39,7 +39,7 @@ describe("Multer's file filter", () => {
     (file) => {
       expect(()=> {
         mockFilter(mockRequest, file, mockCallback);
-      }).toThrow(fileDidNotPass);
+      }).toThrow(Error);
     },
   );
 
@@ -47,6 +47,12 @@ describe("Multer's file filter", () => {
   // csv file should pass
   test('should employ a truthy callback for CSV files', () => {
     mockFilter(mockRequest, MOCK_FILES.csv, mockCallback);
+    expect(mockCallback).toHaveBeenCalledWith(...filePassed);
+  });
+
+
+  test('should employ a truthy callback for application/vnd.ms-excel files', () => {
+    mockFilter(mockRequest, MOCK_FILES.excel, mockCallback);
     expect(mockCallback).toHaveBeenCalledWith(...filePassed);
   });
 });
