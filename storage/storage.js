@@ -5,7 +5,6 @@
 //   - View the docs here: https://github.com/expressjs/multer
 
 
-
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -47,20 +46,16 @@ function fileFilterOptions(req, file, filterCallback) {
 }
 
 
-
 function filterCallback(err, fileDoesPass) {
   if(err) {
     // Handle error here and return to caller can send response status
     // - status code 415: unsuppported media type
     throw err;
   }
-
-  
     // otherwise the file passes
     // return true to caller so file manipulation can begin from there
     return fileDoesPass
 }
-
 
 
 async function cleanupFiles() {
@@ -76,6 +71,7 @@ async function cleanupFiles() {
   if(errors.length > 0) return errors;
   return true;
 }
+
 
 async function deleteAllDirFiles(storageDirectory) {
   fs.readdir(storageDirectory, (err, files) => {
