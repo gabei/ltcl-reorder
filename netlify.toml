@@ -1,0 +1,4 @@
+[[redirects]]
+from = "/"
+to = "/public/index.html"
+force = "true"
