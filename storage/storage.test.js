@@ -37,9 +37,9 @@ describe("Multer's file filter", () => {
     [MOCK_FILES.php],
   ])('should throw an error when %o file types are passed',
     (file) => {
-      expect(()=> {
         mockFilter(mockRequest, file, mockCallback);
-      }).toThrow(Error);
+        expect(mockCallback).toHaveBeenCalledWith(
+          new Error('Invalid file type:' + file.type + ' - ' + file.mimetype));
     },
   );
 
