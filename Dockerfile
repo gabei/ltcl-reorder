@@ -7,6 +7,8 @@
 ARG NODE_VERSION=22.13.1
 FROM node:${NODE_VERSION}-alpine as base
 
+# install python
+
 # Create app directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
