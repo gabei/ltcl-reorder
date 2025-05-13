@@ -14,7 +14,7 @@ const spawnOptions = {
   cwd: scriptDirectory,
   timeout: 5000,
   windowsHide: true,
-  maxBuffer: 1024 * 1024 * 5, // 5 MB
+  //maxBuffer: 1024 * 1024 * 5, // 5 MB
 }
 
 
@@ -25,6 +25,10 @@ export default async function initializeReorderScript(){
     spawnReorder.on("spawn", () => {
       console.log("Reorder script started.");
     });
+    
+    spawnReorder.stdout.on("data", (data) => {
+      console.log("Reorder script output: " + data);
+    }); 
 
     spawnReorder.on("error", (err) => {
       reject(new Error("There was an error while running the reorder script: " + err.message));
