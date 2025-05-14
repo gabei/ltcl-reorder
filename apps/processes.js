@@ -7,7 +7,7 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const scriptDirectory = path.join(__dirname, './reorder-app');
-const scriptCommand = "python reorder.py";
+const scriptCommand = "python -u reorder.py";
 
 
 const spawnOptions = {
