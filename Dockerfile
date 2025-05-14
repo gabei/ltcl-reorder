@@ -9,11 +9,17 @@ FROM node:${NODE_VERSION}-alpine AS base
 
 # install python
 
+
+#tests
+FROM base AS test
+RUN npm run test
+
 # Create app directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Install app dependencies
+FROM base AS prod
 COPY package.json /usr/src/app/
 RUN npm install
 
