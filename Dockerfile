@@ -18,7 +18,7 @@ COPY package.json /usr/src/app/
 
 # run tests
 FROM base AS test
-RUN npm run test
+RUN NODE_ENV=development npm run test
 
 # run build
 FROM base AS prod
