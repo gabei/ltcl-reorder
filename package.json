@@ -9,8 +9,7 @@
     "sass": "sass public/styles/index.scss public/styles/style.css",
     "bulma": "sass --load-path=node_modules public/styles/index.scss public/styles/style.css",
     "bulma-w": "npm run build-bulma -- --watch",
-    "build": "npm install && npm run bulma && pip install -r apps/reorder-app/requirements.txt",
-    "build-py": "pip install -r apps/reorder-app/requirements.txt && npm install && npm run sass",
+    "build": "npm run bulma && pip install -r apps/reorder-app/requirements.txt",
     "start": "node index.js"
   },
   "author": "Gabe Garcia",

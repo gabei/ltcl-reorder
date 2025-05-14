@@ -5,7 +5,7 @@ import 'dotenv/config';
 import reorderRouter from './routes/reorder/reorderRouter.js';
 
 const app = express();
-const PORT = process.env.LOCAL_PORT;
+const PORT = process.env.LOCAL_PORT || 3000;
 
 app.use(cors());
 app.use(helmet());
