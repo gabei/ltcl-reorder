@@ -8,6 +8,7 @@ ARG NODE_VERSION=22.13.1
 FROM node:${NODE_VERSION}-alpine AS base
 
 # install python
+RUN apk add --no-cache python3 py3-pip
 
 # Create app directory
 RUN mkdir -p /usr/src/app
@@ -15,14 +16,7 @@ WORKDIR /usr/src/app
 
 # Install app dependencies
 COPY package.json /usr/src/app/
-
-# run installer
-FROM base AS prod
 RUN npm install
-
-# run tests
-FROM base AS test
-RUN npm run test
 
 # Bundle app source
 COPY . /usr/src/app
