@@ -16,13 +16,13 @@ WORKDIR /usr/src/app
 # Install app dependencies
 COPY package.json /usr/src/app/
 
-# run tests
-FROM base AS test
-RUN NODE_ENV=development npm run test
-
-# run build
+# run installer
 FROM base AS prod
 RUN npm install
+
+# run tests
+FROM base AS test
+RUN npm run test
 
 # Bundle app source
 COPY . /usr/src/app
