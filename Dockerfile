@@ -49,9 +49,12 @@ COPY . .
 
 # Install dependencies
 RUN npm install
-RUN pip install -r --no-cache-dir ./apps/reorder-app/requirements.txt --break-system-packages
+
+WORKDIR /usr/src/app/apps/reorder-app
+RUN pip install -r requirements.txt --break-system-packages
 
 # Expose port 3000 to the outside world
+WORKDIR /usr/src/app
 EXPOSE 3000
 
 # Define environment variable
