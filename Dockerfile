@@ -41,16 +41,20 @@ WORKDIR /usr/src/app
 # install python -- CUSTOM
 RUN apk add --no-cache python3 py3-pip
 
+# Copy the rest of the application source code to the container
+COPY . .
+
 # Copy package.json and package-lock.json to the container
-COPY package*.json ./
+#COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application source code to the container
-COPY . .
+WORKDIR /usr/src/app/apps/reorder-app
+RUN pip install -r requirements.txt --break-system-packages
 
 # Expose port 3000 to the outside world
+WORKDIR /usr/src/app
 EXPOSE 3000
 
 # Define environment variable

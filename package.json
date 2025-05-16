@@ -7,9 +7,14 @@
   "scripts": {
     "test": "cross-env node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "sass": "sass public/styles/index.scss public/styles/style.css",
-    "bulma": "sass --load-path=node_modules public/styles/index.scss public/styles/style.css",
-    "bulma-w": "npm run build-bulma -- --watch",
-    "build": "npm run bulma && pip install -r apps/reorder-app/requirements.txt",
+    "build": "npm run sass && npm run build-python-unsafe",
+    "build-prod": "npm run sass && npm run build-python",
+    "build-python": "npm run create-pyenv && npm run activate-pyenv && npm run install-py-packages",
+    "build-python-unsafe": "pip install -r apps/reorder-app/requirements.txt --break-system-packages",
+    "create-pyenv": "python3 -m venv /environments/venv",
+    "activate-pyenv": ". /environments/venv/bin/activate",
+    "install-py-packages":"pip install -r apps/reorder-app/requirements.txt",
+    "deac-pyenv": "deactivate",
     "start": "node index.js"
   },
   "author": "Gabe Garcia",
