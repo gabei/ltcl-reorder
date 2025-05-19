@@ -14,7 +14,8 @@
 
   <main class="container box">
     <h1 class="title">Reorder Spreadsheet</h1>
-    <form  id="file-upload-form" method="post" action="/reorder" id="file-upload" enctype="multipart/form-data">
+    <form  id="file-upload-form" method="post" id="file-upload" enctype="multipart/form-data">
+      <div id="error-message"></div>
       <div class="file is-info has-name">
         <label class="file-label">
           <input class="file-input" type="file" name="file-input" />

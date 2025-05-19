@@ -5,15 +5,13 @@ const fileName = document.querySelector("form .file-name");
 
 
 fileUploadForm.addEventListener("submit", async (e) => {
-  //e.preventDefault();
-  console.log("Uploading...");
-  // let files = fileSelect.files;
-
-  // console.log(files);
-  
-  // let data = await handleSubmit(files);
-  // console.log(data);
+  e.preventDefault();
+  const formData = new FormData();
+  formData.append("file-input", fileSelect.files[0]);
+  const result = await handleSubmit(formData);
+  displayError(result);
 });
+
 
 
 fileSelect.addEventListener("change", (e) => {
@@ -25,23 +23,30 @@ fileSelect.addEventListener("change", (e) => {
 
 
 
-// async function handleSubmit(fileData){
-//   const options = {
-//     method: "POST",
-//     headers: {
-//       // "Content-Type": "multipart/form-data"
-//     },
-//     body: fileData
-//   }
+function displayError(message) {
+  const errorDiv = document.querySelector("#error-message");
+  errorDiv.innerText = message;
+  errorDiv.style.display = "block";
+} 
 
-//   try 
-//   {
-//     const response = await fetch("/reorder", options);
-//     return response.json();
-//   }
-//   catch(error)
-//   {
-//     console.error(error);
-//   }
+
+
+async function handleSubmit(formData){
+  const options = {
+    method: "POST",
+    body: formData
+  }
+
+  try 
+  {
+    const response = await fetch("/reorder", options);
+    return response.json();
+  }
+  catch(error)
+  {
+    return error;
+  }
   
-// }
+}
+
+
