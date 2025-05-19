@@ -1,7 +1,7 @@
 const fileUploadForm = document.querySelector("#file-upload-form");
 const fileSelect = document.querySelector("form input[type=file]");
 const fileName = document.querySelector("form .file-name");
-
+const errorDiv = document.querySelector("#error-message");
 
 
 fileUploadForm.addEventListener("submit", async (e) => {
@@ -9,7 +9,8 @@ fileUploadForm.addEventListener("submit", async (e) => {
   const formData = new FormData();
   formData.append("file-input", fileSelect.files[0]);
   const result = await handleSubmit(formData);
-  displayError(result);
+  console.log(result.json());
+  displayResponse(result);
 });
 
 
@@ -23,10 +24,17 @@ fileSelect.addEventListener("change", (e) => {
 
 
 
-function displayError(message) {
-  const errorDiv = document.querySelector("#error-message");
-  errorDiv.innerText = message;
-  errorDiv.style.display = "block";
+function displayResponse(message) {
+  
+  if(message.status === "success"){
+    errorDiv.innerText = message;
+    errorDiv.backgroundColor = "#85e68f";
+  }
+
+  if(message.status === "error"){
+    errorDiv.innerText = message.message;
+    errorDiv.backgroundColor = "#e68585";
+  }
 } 
 
 
