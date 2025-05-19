@@ -37,7 +37,7 @@ async function handleReorder(request, response, next){
   } else {
 
     const downloadPath = 'apps/reorder-app/output/output-1.csv';
-    response.status(200).download(downloadPath, (err) => {
+    response.status(200).download(downloadPath, "output-1.csv", (err) => {
       if (err) {
         console.error("Error downloading the file:", err);
         return response.status(500).send({
